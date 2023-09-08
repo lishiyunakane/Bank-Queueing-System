@@ -1,0 +1,98 @@
+
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+    <title>Mobile Taking Number System</title>
+    <style>
+
+
+      #buttons {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        padding-bottom: 20px;
+        font-size: 20px;
+      }
+
+      button {
+        height: 40px;
+        width: 120px;
+        font-size: 15px;
+      }
+
+      #date {
+        font-size: 18px;
+        padding-left: 50px;
+      }
+      #queue {
+        padding-left: 40px;
+        font-size: 18px;
+      }
+      #number {
+        padding-left: 40px;
+        font-size: 18px;
+        padding-bottom: 100px;
+      }
+    </style>
+    </head><body style="background-image: url(&#39;https://images.pexels.com/photos/2310713/pexels-photo-2310713.jpeg&#39;)">
+    <h1 style="text-align:center">Bank Mobile Queuing System</h1>
+    <div id="date" style="text-align:center">Current time: Sun Feb 05 2023 12:17:33 GMT+0800 (新加坡标准时间)</div>
+    <div id="queue" style="text-align:center"></div>
+    <div id="number" style="text-align:center"></div>
+    <br>
+    <br>
+    <br>
+    <div id="buttons" >
+        <select id="brandSelect">
+        <option value="A">Branch A</option>
+        <option value="B">Branch B</option>
+        </select>
+        <button id="personal" onclick="fetchNumber('P')">Personal</button>
+        <button id="business" onclick="fetchNumber('C')">Company</button>
+        <button id="senior" onclick="fetchNumber('S')">Senior Citizen</button>
+    </div>
+    
+
+    <script>
+		var date = new Date();
+		document.getElementById("date").innerHTML = "Current time: " + date;
+
+		updateQueue();
+
+        async function updateQueue() {
+            var selectedBrand = document.getElementById("brandSelect").value;
+            var branch = selectedBrand;
+            const apiUrl = '/take_number/waiting_count?branch='+branch
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            document.getElementById("queue").innerHTML = "Current Waiting Count: P:" + data["Count"]["P"]+ ", C:" + data["Count"]["C"] + ", S:" + data["Count"]["S"];
+          }
+
+        async function fetchNumber(prefix) {
+            var selectedBrand = document.getElementById("brandSelect").value;
+            var branch = selectedBrand;
+            if (selectedBrand === "A") {
+                    client_walk_in_branch = "branch_A";
+            }
+            else
+                    client_walk_in_branch = "branch_B";
+            const apiUrl = '/take_number/generate_number/'+prefix+'?branch='+branch
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            if (!data.number) {
+            let message = "";
+            if (prefix === "P") {
+            message = "Personal service is stopped now";
+            } else if (prefix === "C") {
+            message = "Company service is stopped now";
+            } else if (prefix === "S") {
+            message = "Senior service is stopped now";
+            }
+            document.getElementById("number").innerHTML = message;
+            } else {
+            document.getElementById("number").innerHTML = "Your number is " + data.number;
+            updateQueue();
+            }
+       }
+
+    </script>
+    </body></html>

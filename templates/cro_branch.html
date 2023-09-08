@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to CRO Control Board</title>
+</head>
+<body>
+<div align="center"><h1>Welcome to CRO Control Board</h1></div>
+
+<div align="center">
+    <h3>Branch A</h3>
+    <table>
+        <tr>
+            <th>Type</th>
+            <th>Waiting</th>
+            <th>Served</th>
+            <th>Missed</th>
+        </tr>
+        <tr>
+            <td>P</td>
+            <td>{{ client_counts_A["P"]["Waiting"] }}</td>
+            <td>{{ client_counts_A["P"]["Served"] }}</td>
+            <td>{{ client_counts_A["P"]["Missed"] }}</td>
+        </tr>
+        <tr>
+            <td>C</td>
+            <td>{{ client_counts_A["C"]["Waiting"] }}</td>
+            <td>{{ client_counts_A["C"]["Served"] }}</td>
+            <td>{{ client_counts_A["C"]["Missed"] }}</td>
+        </tr>
+        <tr>
+            <td>S</td>
+            <td>{{ client_counts_A["S"]["Waiting"] }}</td>
+            <td>{{ client_counts_A["S"]["Served"] }}</td>
+            <td>{{ client_counts_A["S"]["Missed"] }}</td>
+        </tr>
+    </table>
+    <table border="0" style="margin:0 auto;">
+        <tr>
+            <td>
+                <button style="background-color:red;color:white" onclick="stop_confirm_Branch_A('Personal')">STOP
+                    Personal
+                </button>
+            </td>
+            <td>
+                <button style="background-color:green;color:white" onclick="start_confirm_Branch_A('Personal')">START
+                    Personal
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button style="background-color:red;color:white" onclick="stop_confirm_Branch_A('Business')">STOP
+                    Business
+                </button>
+            </td>
+            <td>
+                <button style="background-color:green;color:white" onclick="start_confirm_Branch_A('Business')">START
+                    Business
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button style="background-color:red;color:white" onclick="stop_confirm_Branch_A('Senior')">STOP Senior
+                </button>
+            </td>
+            <td>
+                <button style="background-color:green;color:white" onclick="start_confirm_Branch_A('Senior')">START
+                    Senior
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div align="center">
+    <h3>Branch B</h3>
+    <table>
+        <tr>
+            <th>Type</th>
+            <th>Waiting</th>
+            <th>Served</th>
+            <th>Missed</th>
+        </tr>
+        <tr>
+            <td>P</td>
+            <td>{{ client_counts_B["P"]["Waiting"] }}</td>
+            <td>{{ client_counts_B["P"]["Served"] }}</td>
+            <td>{{ client_counts_B["P"]["Missed"] }}</td>
+        </tr>
+        <tr>
+            <td>C</td>
+            <td>{{ client_counts_B["C"]["Waiting"] }}</td>
+            <td>{{ client_counts_B["C"]["Served"] }}</td>
+            <td>{{ client_counts_B["C"]["Missed"] }}</td>
+        </tr>
+        <tr>
+            <td>S</td>
+            <td>{{ client_counts_B["S"]["Waiting"] }}</td>
+            <td>{{ client_counts_B["S"]["Served"] }}</td>
+            <td>{{ client_counts_B["S"]["Missed"] }}</td>
+        </tr>
+    </table>
+    <table border="0" style="margin:0 auto;">
+        <tr>
+            <td>
+                <button style="background-color:red;color:white" onclick="stop_confirm_Branch_B('Personal')">STOP
+                    Personal
+                </button>
+            </td>
+            <td>
+                <button style="background-color:green;color:white" onclick="start_confirm_Branch_B('Personal')">START
+                    Personal
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button style="background-color:red;color:white" onclick="stop_confirm_Branch_B('Business')">STOP
+                    Business
+                </button>
+            </td>
+            <td>
+                <button style="background-color:green;color:white" onclick="start_confirm_Branch_B('Business')">START
+                    Business
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button style="background-color:red;color:white" onclick="stop_confirm_Branch_B('Senior')">STOP Senior
+                </button>
+            </td>
+            <td>
+                <button style="background-color:green;color:white" onclick="start_confirm_Branch_B('Senior')">START
+                    Senior
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+
+    async function stop_confirm_Branch_A(prefix) {
+        event.returnValue = confirm("Do you want to stop Branch A " + prefix + " take queue number service?");
+        if (event.returnValue) {
+            const response = await fetch('/api_cro/stop_confirm_api?type=' + prefix + '&branch=Branch_A');
+            //const data = await response.json();
+            //alert(data.result);
+        }
+    }
+
+    async function start_confirm_Branch_A(prefix) {
+        event.returnValue = confirm("Do you want to start Branch A " + prefix + " take queue number service?");
+        //alert(event.returnValue);
+        if (event.returnValue) {
+            const response = await fetch('/api_cro/start_confirm_api?type=' + prefix + '&branch=Branch_A');
+            //const data = await response.json();
+            //alert(data.result);
+        }
+    }
+
+    async function stop_confirm_Branch_B(prefix) {
+        event.returnValue = confirm("Do you want to stop Branch B " + prefix + " take queue number service?");
+        if (event.returnValue) {
+            const response = await fetch('/api_cro/stop_confirm_api?type=' + prefix + '&branch=Branch_B');
+            const data = await response.json();
+            //alert(data.result);
+        }
+    }
+
+    async function start_confirm_Branch_B(prefix) {
+        event.returnValue = confirm("Do you want to start Branch B " + prefix + " take queue number service?");
+        //alert(event.returnValue);
+        if (event.returnValue) {
+            const response = await fetch('/api_cro/start_confirm_api?type=' + prefix + '&branch=Branch_B');
+            const data = await response.json();
+            //alert(data.result);
+        }
+    }
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+    <html>
+  <head>
+    <meta charset="utf-8">
+    <title>Walk In Taking Number System</title>
+    <style>
+      body {
+        background-image: url("https://images.pexels.com/photos/1906440/pexels-photo-1906440.jpeg?auto=compress&cs=tinysrgb&w=800");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 100%;
+        height: 100vh;
+      }
+
+      @media screen and (max-width: 767px) {
+        body {
+          background-image: url("https://images.pexels.com/photos/1906440/pexels-photo-1906440.jpeg?auto=compress&cs=tinysrgb&w=400");
+          background-size: cover;
+          width: 100%;
+          height: 100vh;
+        }
+      }
+
+
+
+      h1 {
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      #date {
+        font-size: 18px;
+        padding-left: 50px;
+        padding-bottom: 10px;
+      }
+
+      #queue {
+        padding-left: 50px;
+        font-size: 18px;
+      }
+
+      #buttons {
+        display: flex;
+        justify-content: center;
+        margin-top: 150px;
+        padding-bottom: 20px;
+
+      }
+
+
+      button {
+        font-size: 18px;
+        padding: 10px 20px;
+        margin: 4px;
+      }
+
+      #number {
+        text-align: center;
+        margin-top: 50px;
+        font-size: 20px;
+        padding-bottom: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Bank Walk In Taking Number System</h1>
+    <div id="date"></div>
+    <div id="queue"></div>
+    <div id="buttons">
+      <select id="brandSelect">
+        <option value="A">Branch A</option>
+        <option value="B">Branch B</option>
+      </select>
+      <button id="personal" onclick="fetchNumber('P')">Personal</button>
+      <button id="business" onclick="fetchNumber('C')">Company</button>
+      <button id="senior" onclick="fetchNumber('S')">Senior Citizen</button>
+    </div>
+    <div id="number"></div>
+
+    <script>
+      var date = new Date();
+      document.getElementById("date").innerHTML = date;
+
+      updateQueue();
+
+      async function updateQueue() {
+        var selectedBrand = document.getElementById("brandSelect").value;
+        var branch = selectedBrand;
+        const apiUrl = '/take_number/waiting_count?branch='+branch
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        document.getElementById("queue").innerHTML = "Current Waiting Count: P:" + data["Count"]["P"]+ ", C:" + data["Count"]["C"] + ", S:" + data["Count"]["S"];
+      }
+
+      async function fetchNumber(prefix) {
+            var selectedBrand = document.getElementById("brandSelect").value;
+            var branch = selectedBrand;
+            if (selectedBrand === "A") {
+                    client_walk_in_branch = "branch_A";
+            }
+            else
+                    client_walk_in_branch = "branch_B";
+            const apiUrl = '/take_number/generate_number/'+prefix+'?branch='+branch
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            if (!data.number) {
+              let message = "";
+              if (prefix === "P") {
+              message = "Personal service is stopped now";
+              } else if (prefix === "C") {
+              message = "Company service is stopped now";
+              } else if (prefix === "S") {
+              message = "Senior service is stopped now";
+              }
+              document.getElementById("number").innerHTML = message;
+              } else {
+              document.getElementById("number").innerHTML = "Your number is " + data.number;
+              updateQueue();
+              }
+
+       }
+
+    </script>
+  </body>
+</html>
+

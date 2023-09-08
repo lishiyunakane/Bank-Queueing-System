@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+      body {
+        background-color: #f1f1f1;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        background-color: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 500px;
+      }
+      h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      .current-counter {
+        font-weight: bold;
+        font-size: 24px;
+      }
+      .buttons-section {
+        display: flex;
+        justify-content: center;
+        margin-top: 40px;
+      }
+      button {
+        height: 50px;
+        width: 150px;
+        margin: 0 10px;
+        font-size: 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: gray;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+      button:hover {
+        background-color: darkgray;
+      }
+      input[type="text"] {
+        height: 40px;
+        width: 300px;
+        margin: 40px 0;
+        font-size: 18px;
+        border: 1px solid gray;
+        border-radius: 5px;
+        padding: 10px;
+      }
+      #result {
+        font-size: 18px;
+        margin-top: 20px;
+        color: gray;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Queue System for Counter</h1>
+      <h2>Current Branch: <span id="Current_branch">Branch {{branch_name}}</span></h2>
+      <h3>Current Counter: <span id="Current_number">{{counter_number}}</span></h3>
+      <div class="buttons-section">
+        <button onclick="callNext()">Call Next</button>
+        <button onclick="miss()">Miss</button>
+        <button onclick="reschedule()">Reschedule</button>
+      </div>
+      <input type="text" id="reschedule_id" name="reschedule_id" placeholder="Enter ID to reschedule">
+      <div id="result"></div>
+    </div>
+    <script>
+        function callNext() {
+            const branch_name = "{{branch_name}}";
+            const counter_number = "{{counter_number}}";
+            const apiUrl = '/branch_' + branch_name + '/queue_status/counter_' + counter_number + '/next';
+            fetch(apiUrl)
+              .then(response => response.json())
+              .then(data => {
+                alert("Calling result: " + data.calling_res);
+              });
+            }
+          
+
+        function miss() {
+            const branch_name = "{{branch_name}}";
+            const counter_number = "{{counter_number}}";
+            const apiUrl = '/branch_' + branch_name + '/queue_status/counter_' + counter_number + '/missed';
+            fetch(apiUrl)
+              .then(response => response.json())
+              .then(data => {
+                alert(data.missed_res);
+              });
+            }
+
+        function reschedule() {
+            var rescheduleid = document.getElementById("reschedule_id").value;
+            const branch_name = "{{branch_name}}"; 
+            const counter_number = "{{counter_number}}";
+            const apiUrl ='/branch_' + branch_name + '/queue_status/counter_' + counter_number + '/reschedule?rescheduleid=' + rescheduleid;
+            fetch(apiUrl)
+              .then(response => response.json())
+              .then(data => {
+                alert(data.reschedule_res);
+              });
+            }
+    </script>
+  </body>
+</html>
