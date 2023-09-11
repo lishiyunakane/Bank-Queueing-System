@@ -1,36 +1,120 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <title>Welcome to the Bank Queue System</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-    h1 {
-  font-size: 36px;
-  color: #009933;
-  margin-top: 50px;
-}
+    <title>Welcome to the Bank Queue System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: left;
+            margin: 0;
+        }
 
-.container {
-  margin: 0 auto;
-  width: 80%;
-  text-align: left;
-}
+        h1 {
+            font-size: 36px;
+            color: #009933;
+            margin-top: 50px;
+        }
 
-p {
-  font-size: 18px;
-  line-height: 1.5;
-  margin-top: 30px;
-}
-</style>
+        .container {
+            margin: 0 auto;
+            width: 80%;
+            text-align: left;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-top: 30px;
+        }
+
+        /* Button styling */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+
+        .button-container a {
+            text-decoration: none;
+        }
+
+        .button-container button {
+            margin: 10px;
+            padding: 10px 20px;
+            width: 150px;
+            background-color: #009933;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Dropdown styling */
+        .dropdown-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .dropdown-container label {
+            margin-right: 10px;
+        }
+
+        /* Generate API button styling */
+        #generateApi button {
+            background-color: #009933;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
+<body style="text-align: center;">
+    <h1>Welcome to Use Bank Queue System</h1>
+    <div class="container">
+        <p>For clients, walk-in and mobile are designed to take the number in the specific branch.</p>
+        <p>For each counter in the specific branch, the three functions are provided. They are "calling the next client","change the status of current client to missed", "help reschedule the missed client in this branch". </p>
+        <p>For CRO, the current situation of each queue for different types of clients can be shown. CRO has the authority to terminate and restart the number taking for clients.</p>
+    </div>
+</body>
 <body>
-  <h1>Welcome to Use Bank Queue System</h1>
-  <div class="container">
-    <p>For clients, walk-in and mobile are designed to take the number in the specific branch.    
-    <p>For each counter in the specific branch, the three functions are provided. They are "calling the next client","change the status of current client to missed", "help reschedule the missed client in this branch". </p>
-    <p>For CRO, the current situation of each queue for different types of clients can be shown. CRO has the authority to terminate and restart the number taking for clients.</p>
+    <!-- Buttons -->
+    <div class="button-container">
+      <a href="/take_number/walk_in"><button style="margin-left: 185px;">Client: Walk In</button></a>
+      <a href="/take_number/mobile"><button style="margin-left: 185px;">Client: Mobile</button></a>
+      
+      <!-- Wrap Counter button and dropdowns in a div -->
+      <div style="display: flex; align-items: center;">
+          <button onclick="generateAndNavigateAPI()" style="margin-left: 185px;">Stuff: Counter</button>
+          <label for="branchSelect" style="margin-left: 10px;">Branch:</label>
+          <select id="branchSelect">
+              <option value="A">A</option>
+              <option value="B">B</option>
+          </select>
+          <label for="counterSelect" style="margin-left: 10px;">Counter number:</label>
+          <select id="counterSelect">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+          </select>
+      </div>
+      
+      <a href="/CRO"><button style="margin-left: 185px;">CRO: CRO</button></a>
   </div>
+
+   
+    <div id="apiResult" style="text-align:center; margin-top: 20px;"></div>
+
+    <script>
+        async function generateAndNavigateAPI() {
+            var selectedBranch = document.getElementById("branchSelect").value;
+            var selectedCounter = document.getElementById("counterSelect").value;
+            var apiUrl = `/branch_${selectedBranch}/queue_status/counter_${selectedCounter}`;
+
+            // Navigate to the generated API URL
+            window.location.href = apiUrl;
+        }
+    </script>
 </body>
 </html>
